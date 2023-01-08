@@ -1,0 +1,9 @@
+Requirements: 
+Aws client
+Node
+
+Set aws credentials:
+aws configure
+
+Check aws credentials:
+aws sts get-caller-identity
