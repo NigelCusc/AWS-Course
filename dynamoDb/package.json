@@ -1,0 +1,16 @@
+{
+  "name": "dynamodb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1291.0",
+    "dayjs": "^1.11.7",
+    "uuid": "^9.0.0"
+  }
+}
