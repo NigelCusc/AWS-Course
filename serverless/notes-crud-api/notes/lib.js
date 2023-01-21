@@ -8,33 +8,22 @@ const _params = {
 }
 
 const create = async (data) => {
-    try {
-        // const noteId = uuidv4()
-        var params = {
-            ..._params,
-            Item: {
-                notesId: data.id,
-                title: data.title,
-                body: data.body
-            },
-            ConditionExpression: "attribute_not_exists(title)"
-        };
-        await dynamodb.putItem(params).promise();
-        // dynamodb.put(params, function (err, data) {
-        //     if (err) console.log(err);
-        //     else console.log(data);
-        // });
-        return {
-            success: true,
-            data
-        }
-    } catch (err) {
-        return {
-            success: false,
-            message: err?.message,
-            data
-        }
-    }
+    // const noteId = uuidv4()
+    var params = {
+        ..._params,
+        Item: {
+            notesId: data.id,
+            title: data.title,
+            body: data.body
+        },
+        ConditionExpression: "attribute_not_exists(title)"
+    };
+    await dynamodb.put(params).promise();
+    // dynamodb.put(params, function (err, data) {
+    //     if (err) console.log(err);
+    //     else console.log(data);
+    // });
+    return data;
 }
 
 module.exports = {
