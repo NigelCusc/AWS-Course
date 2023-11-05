@@ -1,10 +1,19 @@
+const { CognitoJwtVerifier } = require('aws-jwt-verify')
+
+const jwtVerifier = CognitoJwtVerifier.create({
+    userPoolId: 'eu-central-1_dcrm4Zr8H',
+    tokenUse: 'id',
+    clientId: 'tm9r890q90ughsqor35lb67ou'
+})
+
 
 const generatePolicy = (principalId, effect, resource) => {
     var authResponse = {}
     authResponse.principalId = principalId;
     if (effect && resource) {
+        // IAM policy document
         let policyDocument = {
-            Version: "2023-01-21",
+            Version: "2012-10-17",
             Statement: [
                 {
                     Effect: effect,
@@ -22,18 +31,17 @@ const generatePolicy = (principalId, effect, resource) => {
     return authResponse;
 }
 
-exports.handler = (event, context, callback) => {
-    // Lambda authorizer code
-    var token = event.authorizationToken; // 'allow' or 'deny'
-    switch (token) {
-        case 'allow':
-            callback(null, generatePolicy('user', 'Allow', event.methodArn))
-            break;
-        case 'deny':
-            callback(null, generatePolicy('user', 'Deny', event.methodArn))
-            break;
-        default:
-            callback("Error: Invalid token")
-            break;
+exports.handler = async (event, context, callback) => {
+    try{
+        // Lambda authorizer code
+        var token = event.authorizationToken;
+        console.log({ token })
+        // Validate the token
+        const payload = await jwtVerifier.verify(token)
+        console.log(JSON.stringify(payload))
+        return generatePolicy('user', 'Allow', event.methodArn)
+    } catch (err) {
+        console.log("Error: " + err)
+        return generatePolicy('user', 'Deny', event.methodArn)
     }
 }

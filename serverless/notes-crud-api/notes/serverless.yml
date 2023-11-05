@@ -1,9 +1,9 @@
 service: notes-api
-frameworkVersion: '2'
+frameworkVersion: '3'
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs18.x
   lambdaHashingVersion: 20201221
   stage: dev
   region: eu-central-1
@@ -56,8 +56,8 @@ functions:
           method: delete
           path: notes/{id}
           authorizer: authorizer
-  getNotes:
-    handler: handler.getNotes
+  getAllNotes:
+    handler: handler.getAllNotes
     environment:
       NOTES_TABLE_NAME: !Ref NewResource
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
@@ -70,7 +70,9 @@ functions:
       - http:
           method: get
           path: notes
-          authorizer: authorizer
+          authorizer:
+            name: NotesUserPool
+            arn: arn:aws:cognito-idp:eu-central-1:400907305205:userpool/eu-central-1_dcrm4Zr8H
 
 plugins:
   - serverless-iam-roles-per-function
